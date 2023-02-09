@@ -49,13 +49,14 @@ export class UpdatesComponent implements OnInit {
 
     // checking if the values are in navSection
     if((this.navTable.filter(x =>  Object.values(x).indexOf(url) !== -1 )).length >  0 ) {
+      console.log('yes')
       if(url !== '') {
         this.router.navigateByUrl('/dashboard/'+ url)
       } else { this.router.navigateByUrl('/dashboard') }
     }
     //login
     else  {
-      this.router.navigate([url])
+      this.router.navigateByUrl(url)
     }
 
     this.mainLogicService.getUrl()
