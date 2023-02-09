@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "manageupdates-7af20": {
+      "hosting": {
+        "promeds": [
+          "manageupdates-7af20"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "manageupdates-7af20"
+  }
+}
