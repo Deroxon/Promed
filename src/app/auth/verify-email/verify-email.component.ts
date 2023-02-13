@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-verify-email',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VerifyEmailComponent implements OnInit {
 
-  constructor() { }
+    count: number = 5
+
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
+    this.redirectToMainWebsite()
+  }
+
+  redirectToMainWebsite() {
+    setInterval( () => {
+      this.count--
+      if(this.count  <= 0)  { this.router.navigate(['/login'])}
+    }, 1000)
   }
 
 }

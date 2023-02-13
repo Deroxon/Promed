@@ -16,18 +16,18 @@ export class AuthService {
       localStorage.setItem('token', 'true')
       this.router.navigate([''])
     }, err=> {
-      alert("Something went wrong!" +err)
       this.router.navigate(['/login'])
+      this.snackBarAlert(err)
     })
   }
 
   register(email: string, password: string) {
     this.AngularFireAuth.createUserWithEmailAndPassword(email,password).then( () => {
 
-      alert("Registration Succesful")
+      this.snackBarAlert("Registration Succesful")
       this.router.navigate(['/login'])
     }, err=> {
-      alert('Something wen wrong, pls try again')
+      this.snackBarAlert(err)
       this.router.navigate(['/register'])
     })
   }
@@ -37,8 +37,21 @@ export class AuthService {
       localStorage.removeItem('token')
       this.router.navigate(['/dashboard'])
     }, err => {
-      alert('Somethin went wrong')
+      this.snackBarAlert(err)
     })
+  }
+
+  forgotPassword(email:string) {
+    this.AngularFireAuth.sendPasswordResetEmail(email).then( () => {
+      this.router.navigate(['/verify-email'])
+
+    }, err => {
+      this.snackBarAlert('Something went wrong')
+    })
+  }
+
+  snackBarAlert(message:any) {
+    this._matSnackBar.open(message, 'Dismiss',  {duration: 3500} )
   }
 
 }
