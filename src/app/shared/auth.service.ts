@@ -12,9 +12,14 @@ export class AuthService {
 
 
   login(email: string, password: string) {
-    this.AngularFireAuth.signInWithEmailAndPassword(email,password).then( () => {
-      localStorage.setItem('token', 'true')
-      this.router.navigate([''])
+    this.AngularFireAuth.signInWithEmailAndPassword(email,password).then( (res) => {
+      if(res.user?.emailVerified == true) {
+        localStorage.setItem('token', 'true')
+        this.router.navigate([''])
+      } else {
+        this.router.navigate(['/verify-email'])
+      }
+
     }, err=> {
       this.router.navigate(['/login'])
       this.snackBarAlert(err)
@@ -22,12 +27,25 @@ export class AuthService {
   }
 
   register(email: string, password: string) {
-    this.AngularFireAuth.createUserWithEmailAndPassword(email,password).then( () => {
-
+    this.AngularFireAuth.createUserWithEmailAndPassword(email,password).then( res => {
       this.snackBarAlert("Registration Succesful")
       this.router.navigate(['/login'])
+
+      this.sendEmailForVerification(res.user)
     }, err=> {
-      this.snackBarAlert(err)
+        // validation
+        if(this.checkEmailFormat(email)) {
+          if(password) {
+            this.snackBarAlert(err)
+          } else {
+            this.snackBarAlert('Please fill the \'password\' field ')
+          }
+
+        }
+        else {
+          this.snackBarAlert('The email is formatted incorrectly, please try again')
+        }
+
       this.router.navigate(['/register'])
     })
   }
@@ -46,12 +64,32 @@ export class AuthService {
       this.router.navigate(['/verify-email'])
 
     }, err => {
-      this.snackBarAlert('Something went wrong')
+      this.snackBarAlert(err)
+    })
+  }
+
+   // email verification
+  sendEmailForVerification(user:any) {
+    user.sendEmailVerification().then((res:any)=> {
+      this.router.navigate(['/verify-email'])
+    }, (err:any) => {
+      this.snackBarAlert(err)
     })
   }
 
   snackBarAlert(message:any) {
     this._matSnackBar.open(message, 'Dismiss',  {duration: 3500} )
   }
+
+
+  //validation email
+  checkEmailFormat(email:string) {
+    return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+  }
+
 
 }

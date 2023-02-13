@@ -17,8 +17,14 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   forgotPassword()  {
-    this.authService.forgotPassword(this.email)
-    this.email =''
+    if(this.email) {
+      this.authService.forgotPassword(this.email)
+      this.email =''
+    }
+    else {
+      this.authService.snackBarAlert('Please, fill email input')
+    }
+
   }
 
 }
