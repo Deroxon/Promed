@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainLogicService {
 
-  currentUrl: string = ''
+  private currentUrl: string = ''
 
+  private currentUrl$ = new Subject()
 
-
-  currentUrl$ = new Subject()
-
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService:AuthService, private angularFireAuth: AngularFireAuth) { }
 
 
   getUrl() {
@@ -22,7 +22,11 @@ export class MainLogicService {
   }
 
 
+
   subCurrentUrl():Observable<any> {
     return this.currentUrl$.asObservable()
   }
+
+
+
 }

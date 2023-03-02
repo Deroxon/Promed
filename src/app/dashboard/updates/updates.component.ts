@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/shared/auth.service';
 import { MainLogicService } from 'src/app/shared/main-logic.service';
 
 
@@ -9,6 +10,8 @@ import { MainLogicService } from 'src/app/shared/main-logic.service';
   styleUrls: ['./updates.component.css']
 })
 export class UpdatesComponent implements OnInit {
+
+  isUserLoggedIn:any;
 
   navTable = [
   {
@@ -38,10 +41,16 @@ export class UpdatesComponent implements OnInit {
   },
  ]
 
-  constructor(private router: Router, private mainLogicService: MainLogicService) { }
+  constructor(private router: Router, private mainLogicService: MainLogicService, private authService: AuthService) { }
 
   ngOnInit(): void {
-
+    this.authService.isUserLogged()
+    this.authService.subUserLogged().subscribe( data => {
+      this.isUserLoggedIn = data
+    })
+  }
+  logout() {
+    this.authService.logout()
   }
 
   changeUrl(url: any) {

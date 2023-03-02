@@ -2,13 +2,21 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import{ AngularFireAuth} from "@angular/fire/compat/auth"
+import { Observable, Subject } from 'rxjs';
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { user } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private AngularFireAuth: AngularFireAuth, private router: Router, private _matSnackBar:  MatSnackBar) { }
+
+  private isUserLoggedIn: boolean = false
+
+  private isUserLoggedIn$ = new Subject()
+
+  constructor(private AngularFireAuth: AngularFireAuth, private router: Router, private _matSnackBar:  MatSnackBar, ) { }
 
 
   login(email: string, password: string) {
@@ -52,8 +60,11 @@ export class AuthService {
 
   logout() {
     this.AngularFireAuth.signOut().then( () => {
+
       localStorage.removeItem('token')
       this.router.navigate(['/dashboard'])
+      this.snackBarAlert('Logout Succesfull')
+      this.isUserLogged()
     }, err => {
       this.snackBarAlert(err)
     })
@@ -77,6 +88,18 @@ export class AuthService {
     })
   }
 
+  isUserLogged() {
+    console.log('init')
+    console.log(this.AngularFireAuth.currentUser)
+    if(this.AngularFireAuth.user) {
+      this.isUserLoggedIn = true
+    } else {
+      this.isUserLoggedIn = false
+    }
+    this.isUserLoggedIn$.next(this.isUserLoggedIn)
+
+  }
+
   snackBarAlert(message:any) {
     this._matSnackBar.open(message, 'Dismiss',  {duration: 3500} )
   }
@@ -90,6 +113,11 @@ export class AuthService {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
   }
+
+  subUserLogged():Observable<any> {
+    return this.isUserLoggedIn$.asObservable()
+  }
+
 
 
 }
