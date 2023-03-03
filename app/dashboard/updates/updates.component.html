@@ -1,0 +1,27 @@
+<div class="container">
+
+  <nav>
+    <div>
+      <ul>
+        <li *ngFor="let navElement of navTable"
+        [routerLinkActive]="'active'"
+        [routerLinkActiveOptions]="{exact: true}"
+        >
+        <a  (click)="changeUrl(navElement.url)" > {{navElement.name}} </a>
+        </li>
+        <li>
+          <a *ngIf="!isUserLoggedIn" (click)="changeUrl('/login')" > Login </a>
+          <a *ngIf="isUserLoggedIn" (click)="logout()" > Logout </a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+
+
+
+
+
+</div>
+<router-outlet></router-outlet>
