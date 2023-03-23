@@ -3,14 +3,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import{ AngularFireAuth} from "@angular/fire/compat/auth"
 import { Observable, Subject } from 'rxjs';
-import { getAuth, onAuthStateChanged } from '@firebase/auth';
-import { user } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
 
   private isUserLoggedIn: boolean = false
 
@@ -23,7 +20,7 @@ export class AuthService {
     this.AngularFireAuth.signInWithEmailAndPassword(email,password).then( (res) => {
       if(res.user?.emailVerified == true) {
         localStorage.setItem('token', 'true')
-        this.router.navigate([''])
+        this.router.navigate(['/dashboard'])
       } else {
         this.router.navigate(['/verify-email'])
       }
@@ -62,7 +59,7 @@ export class AuthService {
     this.AngularFireAuth.signOut().then( () => {
 
       localStorage.removeItem('token')
-      this.router.navigate(['/dashboard'])
+      this.router.navigate(['/login'])
       this.snackBarAlert('Logout Succesfull')
       this.isUserLogged()
     }, err => {
@@ -89,16 +86,19 @@ export class AuthService {
   }
 
   isUserLogged() {
-    console.log('init')
-    console.log(this.AngularFireAuth.currentUser)
-    if(this.AngularFireAuth.user) {
-      this.isUserLoggedIn = true
-    } else {
-      this.isUserLoggedIn = false
-    }
-    this.isUserLoggedIn$.next(this.isUserLoggedIn)
+    this.AngularFireAuth.onAuthStateChanged(user => {
+      console.log(user?.email)
+      if(user) {
+        this.isUserLoggedIn = true
+      } else {
+        this.isUserLoggedIn = false
+      }
+      this.isUserLoggedIn$.next(this.isUserLoggedIn)
+    })
 
   }
+
+
 
   snackBarAlert(message:any) {
     this._matSnackBar.open(message, 'Dismiss',  {duration: 3500} )
@@ -114,7 +114,7 @@ export class AuthService {
     );
   }
 
-  subUserLogged():Observable<any> {
+  subUserLogged$():Observable<any> {
     return this.isUserLoggedIn$.asObservable()
   }
 

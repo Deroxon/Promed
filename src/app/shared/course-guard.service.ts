@@ -15,14 +15,14 @@ export class CourseGuardService implements CanActivate{
 
     this.authService.isUserLogged()
 
+
     this.authService.subUserLogged$().subscribe( data => {
+      console.log(data)
       if(data) {
-        console.log('logged')
         this.router.navigate(['/dashboard'])
         this.isLoggedIn = true
       }
       else {
-        console.log('not logged')
         this.router.navigate(['/login'])
         this.isLoggedIn = false
       }

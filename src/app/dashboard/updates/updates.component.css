@@ -1,39 +1,25 @@
-
-
-nav {
-  width:100%;
-}
-
-nav div {
-
-}
 ul {
-  text-align: center;
-  justify-content: center;
-  display: inline-flex;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  padding-inline-start: 0px;
   list-style-type: none;
 }
-li {
-  margin: 20px 40px;
-  font-size: 1.8em;
-  text-align: center;
-  cursor: pointer;
+.sidenav {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
-li a  {
-  opacity:0.7;
-  text-decoration: none;
+.sidenavContent {
+  height: 100vh;
 }
-li a:hover {
-  color: rgb(54, 51, 51);
-  opacity: 1;
+nav{
+  min-height: 80px;
+  width: 100%;
 }
-li a:visited {
-  color: rgb(54, 51, 51);
+.drawContainer{
+  height: 100%;
+  min-height: 100px;
+  background-color: rgb(236, 179, 179);
 }
-
+.container {
+  width: 100vw;
+  height: 100vh;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/shared/auth.service';
-import { MainLogicService } from 'src/app/shared/main-logic.service';
+import { AuthService } from 'app/shared/auth.service';
+import { MainLogicService } from 'app/shared/main-logic.service';
 
 
 @Component({
@@ -41,11 +41,13 @@ export class UpdatesComponent implements OnInit {
   },
  ]
 
+  toggleNav: boolean = false
+
   constructor(private router: Router, private mainLogicService: MainLogicService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.isUserLogged()
-    this.authService.subUserLogged().subscribe( data => {
+    this.authService.subUserLogged$().subscribe( data => {
       this.isUserLoggedIn = data
     })
   }

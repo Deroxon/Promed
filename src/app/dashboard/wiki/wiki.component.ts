@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'app/shared/auth.service';
 
 @Component({
   selector: 'app-wiki',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WikiComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
+
+
 
 }
